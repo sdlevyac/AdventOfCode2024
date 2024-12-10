@@ -24,6 +24,12 @@ def part01():
 
 def check_cross(block):
     print(block)
+    x = "".join(block[1])
+    y = "".join(block[n][1] for n in range(3))
+    print(x,y)
+    xyPos = "".join([block[n][n] for n in range(3)])
+    xyNeg = "".join([block[n][2-n] for n in range(3)])
+    print(xyPos,xyNeg)
     #two cross shapes to check:
     #   .?.     ?.?
     #   ?A?     .A.
