@@ -1,21 +1,5 @@
 data = open("Inputs/Day05.txt").read().split("\n\n")
 
-def search_for_page(before, after):
-    these_rules = [rule for rule in rules if rule[0] == before]
-    for rule in these_rules:
-        if rule[1] == after:
-            return True
-    for rule in these_rules:
-        return search_for_page(rule[1], after)
-    return False
-
-def check_update(page):
-    print(page)
-    for i in range(len(page) - 1):
-        if not search_for_page(page[i], page[i + 1]):
-            return False
-    return True
-
 rules = data[0].split("\n")
 rules = [rule.split("|") for rule in rules]
 #print(rules)
@@ -23,8 +7,33 @@ rules = [rule.split("|") for rule in rules]
 pages = data[1].split("\n")
 pages = [row.split(",") for row in pages]
 #print(pages)
-ans = 0
+
+runs = {}
+for rule in rules:
+    before = rule[0]
+    after = rule[1]
+    if before not in runs.keys():
+        runs[before] = []
+    runs[before].append(after)
+
 for page in pages:
-    if check_update(page):
-        ans += int(page[len(page) // 2])
-print(ans)
+    print(page)
+    for i in range(len(page) - 1):
+        start = page[i]
+        end = page[i + 1]
+        #print(start,end)
+        current = ""
+        toVisit = [start]
+        visited = []
+
+        found = False
+        while current != end and len(toVisit) != 0:
+            current = toVisit[0]
+            toVisit = toVisit[1:]
+            visited.append(current)
+            if current in runs.keys():
+                for node in runs[current]:
+                    if node not in visited and node not in toVisit:
+                        toVisit.append(node)
+
+        print(current == end)
