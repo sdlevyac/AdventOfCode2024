@@ -23,26 +23,24 @@ def part01():
     print(lines.count("XMAS"))
 
 def check_cross(block):
-    print(block)
-    x = "".join(block[1])
-    y = "".join(block[n][1] for n in range(3))
-    print(x,y)
+    valid = ["MAS", "SAM"]
     xyPos = "".join([block[n][n] for n in range(3)])
     xyNeg = "".join([block[n][2-n] for n in range(3)])
-    print(xyPos,xyNeg)
-    #two cross shapes to check:
-    #   .?.     ?.?
-    #   ?A?     .A.
-    #   .?.     ?.?
+    return xyPos in valid and xyNeg in valid
+
+
+ans = 0
 
 for i in range(len(data)):
     for j in range(len(data)):
-        if data[i][j] == "A":
-            print("checking...")
+        if data[i][j] == "A":          
             if i - 1 >= 0 and j - 1 >= 0 and i + 1 < len(data) and j + 1 < len(data):
                 block = []
                 for x in [-1,0,1]:
-                    print(data[i+x][j-1:j+2])
+
                     block.append(list(data[i+x][j-1:j+2]))
-                check_cross(block)
-            print()
+                if check_cross(block):
+                    ans += 1
+
+print(ans)
+
