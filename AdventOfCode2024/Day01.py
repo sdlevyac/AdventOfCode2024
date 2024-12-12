@@ -1,5 +1,6 @@
 data = open("Inputs/Day01.txt","r").read().split("\n")
 data = [l.split("   ") for l in data]
+
 col01 = [int(l[0]) for l in data]
 col02 = [int(l[1]) for l in data]
 

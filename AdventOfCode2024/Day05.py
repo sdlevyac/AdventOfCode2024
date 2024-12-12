@@ -13,8 +13,8 @@ for rule in rules:
     before = rule[0]
     after = rule[1]
     if before not in runs.keys():
-        runs[before] = []
-    runs[before].append(after)
+        runs[before] = set()
+    runs[before].add(after)
 
 for page in pages:
     print(page)
