@@ -1,3 +1,5 @@
+from functools import *
+
 data = open("Inputs/Day05.txt").read().split("\n\n")
 
 rules = data[0].split("\n")
@@ -8,32 +10,56 @@ pages = data[1].split("\n")
 pages = [row.split(",") for row in pages]
 #print(pages)
 
-runs = {}
+def inOrder(page):
+    for i in range(len(page)):
+        for j in range(i + 1, len(page)):
+            if page[i] not in orders.keys() and i + 1 != len(page):
+                inOrder = False
+                return False
+            if page[j] not in orders[page[i]]:
+                inOrder = False
+                return False
+    return True
+
+
+def compare(a,b):
+    if a in orders[b]:
+        return 1
+    if b in orders[a]:
+        return -1
+    return 0
+
+ans = 0
+
+bad = []
+
+orders = {}
 for rule in rules:
     before = rule[0]
     after = rule[1]
-    if before not in runs.keys():
-        runs[before] = set()
-    runs[before].add(after)
+    if before not in orders.keys():
+        orders[before] = set()
+    if after not in orders.keys():
+        orders[after] = set()
+    orders[before].add(after)
+
 
 for page in pages:
-    print(page)
-    for i in range(len(page) - 1):
-        start = page[i]
-        end = page[i + 1]
-        #print(start,end)
-        current = ""
-        toVisit = [start]
-        visited = []
+    if inOrder(page):
+        ans += int(page[len(page) // 2])
+    else:
+        bad.append(page)
 
-        found = False
-        while current != end and len(toVisit) != 0:
-            current = toVisit[0]
-            toVisit = toVisit[1:]
-            visited.append(current)
-            if current in runs.keys():
-                for node in runs[current]:
-                    if node not in visited and node not in toVisit:
-                        toVisit.append(node)
+print(ans)
+print(bad)
 
-        print(current == end)
+ans = 0
+
+for page in bad:
+    page = sorted(page, key=cmp_to_key(compare))
+    ans += int(page[len(page) // 2])
+
+print(ans)
+
+
+    
