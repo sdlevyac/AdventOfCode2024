@@ -27,24 +27,19 @@ for i in range(len(coords)):
 			if antennae[coords[i]] == antennae[coords[j]]:
 				print(f"pair of '{antennae[coords[i]]}'s at {coords[i]} and {coords[j]}")
 				diff = (coords[i][0] - coords[j][0], coords[i][1] - coords[j][1])
-				antinode = (coords[i][0] + diff[0], coords[i][1] + diff[1])
-				if antinode[0] >= 0 and antinode[0] < len(data) and antinode[1] >= 0 and antinode[1] < len(data[0]):
-					antinodes[antinode[0]][antinode[1]] = "#"
-					print(antinode)
+				step = 0
+				while True:				
+					antinode = (coords[i][0] + diff[0] * step, coords[i][1] + diff[1] * step)
+					if antinode[0] >= 0 and antinode[0] < len(data) and antinode[1] >= 0 and antinode[1] < len(data[0]):
+						antinodes[antinode[0]][antinode[1]] = "#"
+						#print(antinode)
+						step += 1
+					else:
+						break
 
 
-
+draw()
 print(sum([row.count("#") for row in antinodes]))
 
-antinodes = [["." for col in row] for row in data]
-for i in range(len(coords)):
-	for x in range(len(data)):
-		for y in range(len(data[0])):
-			if x == coords[i][0] or y == coords[i][1] or abs(coords[i][0] - x) == abs(coords[i][1] - y):
-				if antinodes[x][y] == ".":
-					antinodes[x][y] = antennae[coords[i]]
-				elif antinodes[x][y] == antennae[coords[i]]:
-					antinodes[x][y] = "#"
-	draw()
-	input()
+
 
