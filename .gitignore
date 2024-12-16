@@ -361,3 +361,15 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/AdventOfCode2024/Inputs/Day01.txt
+/AdventOfCode2024/Inputs/Day02.txt
+/AdventOfCode2024/Inputs/Day03.txt
+/AdventOfCode2024/Inputs/Day04.txt
+/AdventOfCode2024/Inputs/Day05.txt
+/AdventOfCode2024/Inputs/Day06.txt
+/AdventOfCode2024/Inputs/Day07.txt
+/AdventOfCode2024/Inputs/Day08.txt
+/AdventOfCode2024/Inputs/Day09.txt
+/AdventOfCode2024/Inputs/Day10.txt
+/AdventOfCode2024/Inputs/Day11.txt
+/AdventOfCode2024/Inputs/Day12.txt
