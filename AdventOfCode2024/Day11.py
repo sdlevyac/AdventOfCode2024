@@ -4,6 +4,7 @@ stones = [int(_) for _ in data]
 def bruteforce(stones, limit):
     count = 0
     while count != limit:
+        print(count)
         count += 1
         stonesBuffer = []
         for stone in stones:
@@ -21,38 +22,47 @@ def bruteforce(stones, limit):
         #input()
     return len(stones)
 
-# part1 = bruteforce(stones,25)
-# print(part1)
 
-transforms = {0:[1],}
 
-stones_ = [stone for stone in stones]
-stones = {stone : stones.count(stone) for stone in stones}
+def cache(stones,limit):
 
-count = 1
-while count <= 75:
-    stonesBuffer = {}
-    for stone in stones.keys():
-        result = []
-        if stone in transforms.keys():
-            result.extend(transforms[stone])
-        else:
-            if len(str(stone)) % 2 == 0:
-                stoneString = str(stone)
-                result = [int(stoneString[:len(stoneString) // 2]), int(stoneString[len(stoneString) // 2:])]
-                transforms[stone] = result
+    transforms = {0:[1],}
+
+    stones_ = [stone for stone in stones]
+    stones = {stone : stones.count(stone) for stone in stones}
+
+    count = 1
+    while count <= limit:
+        print(count)
+        stonesBuffer = {}
+        for stone in stones.keys():
+            result = []
+            if stone in transforms.keys():
+                result.extend(transforms[stone])
             else:
-                result = [stone * 2024]
-                transforms[stone] = result
-        for r in result:
-            if r in stonesBuffer.keys():
-                stonesBuffer[r] += stones[stone]
-            else:
-                stonesBuffer[r] = stones[stone]
-    stones = {stone:stonesBuffer[stone] for stone in stonesBuffer.keys()}   
-    count += 1
-    #input()
-print(sum([stones[stone] for stone in stones.keys()]))
+                if len(str(stone)) % 2 == 0:
+                    stoneString = str(stone)
+                    result = [int(stoneString[:len(stoneString) // 2]), int(stoneString[len(stoneString) // 2:])]
+                    transforms[stone] = result
+                else:
+                    result = [stone * 2024]
+                    transforms[stone] = result
+            for r in result:
+                if r in stonesBuffer.keys():
+                    stonesBuffer[r] += stones[stone]
+                else:
+                    stonesBuffer[r] = stones[stone]
+        stones = {stone:stonesBuffer[stone] for stone in stonesBuffer.keys()}   
+        count += 1
+        #input()
+    return sum([stones[stone] for stone in stones.keys()])
+
+part1 = cache(stones,7500)
+print(part1)
+
+
+
+
 #things can either -> become 1, split in half, or multiply by 2024
 #all 0s become 1s, all 1s become 2024, all 2024s become 20 and 24
 #   all 20s become 2 and 0, all 24s become 2 and 4

@@ -35,6 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Day08.py" />
+    <Content Include="Inputs\Day11.txt" />
     <Content Include="Inputs\Day01.txt" />
     <Content Include="Inputs\Day02.txt" />
     <Content Include="Inputs\Day03.txt" />
