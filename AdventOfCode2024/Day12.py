@@ -6,22 +6,17 @@ def draw(grid):
     for row in grid:
         print("".join([_ if _ in ["#","@","%"] else "." for _ in row ]))
 
-def get_neighbourhood(grid,coords):
-    n = []
-    for x in range(-1,2):
-        for y in range(-1,2):
-            n.append((coords[0] + x,coords[1] + y))
-    #return list of neighbour coords, not neighbour values
-    #return "".join([grid[nbr[0]][nbr[1]] for nbr in n])
-    return n
-
-
 def find_corners(grid,visited):
+    min_i = min([v[0] for v in visited]) - 1
+    max_i = max([v[0] for v in visited]) + 1
+    min_j = min([v[1] for v in visited]) - 1
+    max_j = max([v[1] for v in visited]) + 1
+
     grid = [[_ if _ in ["#"] else "." for _ in row] for row in grid]
     corners = ["###.","##.#","#.##",".###", "...#","..#.",".#..","#..."]
     c = 0
-    for i in range(len(grid) - 1):
-        for j in range(len(grid[0]) - 1):
+    for i in range(min_i, max_i):
+        for j in range(min_j,max_j):
             zone = grid[i][j] + grid[i][j+1] + grid[i+1][j] + grid[i+1][j+1]
             if zone in corners:
                 c += 1
@@ -60,8 +55,9 @@ def floodFill(grid, i, j, day2):
     gridBuffer = [[_ for _ in row] for row in grid]
     perimeter = fence(gridBuffer, visited, day2)
     corners = find_corners(gridBuffer, visited)
-    price = area * corners
-    return price
+    price1 = area * perimeter
+    price2 = area * corners
+    return price1, price2
 
 
 data.append(["0" for _ in range(len(data[0]))])
@@ -76,15 +72,18 @@ for i in range(len(data)):
 
 filled = set()
 
-ans = 0
+ans1 = 0
+ans2 = 0
 
 for i in range(len(data)):
     for j in range(len(data[i])):
         current = (i,j)
         if data[i][j] != "0" and current not in filled:
             buffer = [[_ for _ in row] for row in data]
-            ans += floodFill(buffer,i,j,True)
+            price1, price2 = floodFill(buffer,i,j,True)
+            ans1 += price1
+            ans2 += price2
 
-print(ans)
+print(ans1,ans2)
 
 
