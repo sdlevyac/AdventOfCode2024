@@ -18,23 +18,16 @@ def get_neighbourhood(grid,coords):
 
 def find_corners(grid,visited):
     grid = [[_ if _ in ["#"] else "." for _ in row] for row in grid]
-    draw(grid)
-    corners = set()
-    for cell in visited:
-        neighbourhood = get_neighbourhood(grid,cell)
-        print(f"neighbours of {cell}")
-        for neighbour in neighbourhood:
-            print(neighbour, grid[neighbour[0]][neighbour[1]])
-            if grid[neighbour[0]][neighbour[1]] == ".":
-                corners.add((neighbour[0], neighbour[1]))
-        input()
-    print(corners)
-    print(len(corners))
-    input()
-        # if "@" in neighbourhood:
-        #     #iterate across neighbour coords and add coord to SET if . is present
-        #     print(cell, get_neighbourhood(grid,cell))
-        #     input()
+    corners = ["###.","##.#","#.##",".###", "...#","..#.",".#..","#..."]
+    c = 0
+    for i in range(len(grid) - 1):
+        for j in range(len(grid[0]) - 1):
+            zone = grid[i][j] + grid[i][j+1] + grid[i+1][j] + grid[i+1][j+1]
+            if zone in corners:
+                c += 1
+            elif zone in ["#..#",".##."]:
+               c += 2
+    return c
 
 def fence(grid, visited, day2):
     perimeter = 0
@@ -44,15 +37,12 @@ def fence(grid, visited, day2):
             if grid[f[0]][f[1]] != "#":
                 grid[f[0]][f[1]] = "@"
                 perimeter += 1
-
-    draw(grid)
     if day2:
         return sum([row.count("@") for row in grid])
     else:
         return perimeter
 
 def floodFill(grid, i, j, day2):
-    print(f"flood filling {grid[i][j]}s from ({i},{j})")
     toVisit = [(i,j)]
     visited = set()
     while len(toVisit) != 0:
@@ -67,14 +57,10 @@ def floodFill(grid, i, j, day2):
                 toVisit.append(step)
                 
     area = sum([row.count("#") for row in grid])
-    #draw(grid)
     gridBuffer = [[_ for _ in row] for row in grid]
     perimeter = fence(gridBuffer, visited, day2)
     corners = find_corners(gridBuffer, visited)
-    #perimeter = walk(gridBuffer, (i,j))
-    price = area * perimeter
-    print(f"{area} * {perimeter} = {price}")
-    input()
+    price = area * corners
     return price
 
 
