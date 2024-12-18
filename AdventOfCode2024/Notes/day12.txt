@@ -1,0 +1,35 @@
+sample input:
+AAAA
+BBCD
+BBCC
+EEEC
+
+4 corners
+.....
+.###.
+.###.
+.###.
+.....
+
+
+top left corner    : ...|.##|.##
+top right corner   : ...|##.|##.
+bottom left corner : .##|.##|...
+bottom right corner: ##.|##.|... 
+4 .s in middle bands
+
+
+
+12 corners
+.....
+..#..
+.###.
+..#..
+.....
+
+top:    ...|.#.|###
+left:   ..#|.##|..#
+bottom: ###|.#.|...
+right:  #..|##.|#..
+middle: .#.|###|.#.
+

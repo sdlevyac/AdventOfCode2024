@@ -49,9 +49,11 @@
     <Content Include="Inputs\Day11.txt" />
     <Content Include="Inputs\Day12.txt" />
     <Content Include="main.py" />
+    <Content Include="Notes\day12.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Inputs\" />
+    <Folder Include="Notes\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

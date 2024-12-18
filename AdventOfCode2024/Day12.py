@@ -2,68 +2,39 @@ data = open("Inputs/Day12.txt").read().split("\n")
 data = [list(row) for row in data]
 
 def draw(grid):
+    print("~"*len(grid[0]))
     for row in grid:
         print("".join([_ if _ in ["#","@","%"] else "." for _ in row ]))
 
-def walk(grid,start):
-    grid = [[_ if _ in ["#","@","%"] else "." for _ in row] for row in grid]
-    start = (start[0] - 1, start[1])
-    print(f"starting at {start}")
-    current = [start[0], start[1]]
-    steps = 0
-    sides = 0
-    direction = 0
-    directions = [(0,1),(1,0),(0,-1),(-1,0)]
-    walking = True
-    while walking:
-        #need to be able to handle turning anticlockwise!
-        #lfr = (left, forward)
-        #if lf = (#,_) go forward
-        #if lf = (_,_) go left
-        #if lf = (#,#) go right
-        print(f"stepping from {current} in direction {directions[direction]}")
-        grid[current[0]][current[1]] = "%"
-        toCheck = directions[(direction + 1) % 4]
-        toCheck = (toCheck[0] + current[0], toCheck[1] + current[1])
-        left = directions[(direction + 1) % 4]
-        forward = directions[direction]
-        lf = (grid[current[0] + left[0]][current[1] + left[1]],grid[current[0] + forward[0]][current[1] + forward[1]])
-        print(f"checking {toCheck}")
-        print(lf)
-        draw(grid)
-        input()
-        if lf == ("#","."):
-            print("go forward")
-            steps += 1
-            current = [current[0] + directions[direction][0], current[1] + directions[direction][1]]
-        elif lf == (".","."):
-            print("turn left")
-            direction = (direction + 1) % 4
-            sides += 1
-            steps += 1
-            current = [current[0] + directions[direction][0], current[1] + directions[direction][1]]
-        elif lf == ("#","#"):
-            print("turn right")
-            direction = (direction - 1) % 4
-            sides += 1
-            steps += 1
-            current = [current[0] + directions[direction][0], current[1] + directions[direction][1]]
-        elif lf == (".","#"):
-            current = [current[0] - directions[direction][0], current[1] - directions[direction][1]]
-            direction = (direction - 1) % 4
-        elif "%" in lf:
-            walking = False
+def get_neighbourhood(grid,coords):
+    n = []
+    for x in range(-1,2):
+        for y in range(-1,2):
+            n.append((coords[0] + x,coords[1] + y))
+    #return list of neighbour coords, not neighbour values
+    #return "".join([grid[nbr[0]][nbr[1]] for nbr in n])
+    return n
 
-        # if grid[toCheck[0]][toCheck[1]] == "#":
-        #     steps += 1
-        #     current = [current[0] + directions[direction][0], current[1] + directions[direction][1]]
-            
-        # else:
-        #     direction = (direction + 1) % 4
-        #     sides += 1
-        #     steps += 1
-        #     current = [current[0] + directions[direction][0], current[1] + directions[direction][1]]
-    return sides
+
+def find_corners(grid,visited):
+    grid = [[_ if _ in ["#"] else "." for _ in row] for row in grid]
+    draw(grid)
+    corners = set()
+    for cell in visited:
+        neighbourhood = get_neighbourhood(grid,cell)
+        print(f"neighbours of {cell}")
+        for neighbour in neighbourhood:
+            print(neighbour, grid[neighbour[0]][neighbour[1]])
+            if grid[neighbour[0]][neighbour[1]] == ".":
+                corners.add((neighbour[0], neighbour[1]))
+        input()
+    print(corners)
+    print(len(corners))
+    input()
+        # if "@" in neighbourhood:
+        #     #iterate across neighbour coords and add coord to SET if . is present
+        #     print(cell, get_neighbourhood(grid,cell))
+        #     input()
 
 def fence(grid, visited, day2):
     perimeter = 0
@@ -98,8 +69,9 @@ def floodFill(grid, i, j, day2):
     area = sum([row.count("#") for row in grid])
     #draw(grid)
     gridBuffer = [[_ for _ in row] for row in grid]
-    #perimeter = fence(gridBuffer, visited, day2)
-    perimeter = walk(gridBuffer, (i,j))
+    perimeter = fence(gridBuffer, visited, day2)
+    corners = find_corners(gridBuffer, visited)
+    #perimeter = walk(gridBuffer, (i,j))
     price = area * perimeter
     print(f"{area} * {perimeter} = {price}")
     input()
