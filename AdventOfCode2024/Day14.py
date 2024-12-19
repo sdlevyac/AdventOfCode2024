@@ -6,14 +6,18 @@ def draw(grid):
         print("".join([str(_) for _ in row]))
 
 
-dim = (11,7)
+dim = (101,103)
 
 data = [line.split(" ") for line in data]
 data = [[coord[2:] for coord in line] for line in data]
 data = [[coord.split(",") for coord in line] for line in data]
 data = [[[int(coord) for coord in coords] for coords in line] for line in data]
 
-for i in range(101):
+
+i = 0
+while i <= 10000:
+#for i in range(101):
+
     print(f"after {i+1} seconds:")
     grid = [[0 for _ in range(dim[0])] for __ in range(dim[1])]
     for robot in data:
@@ -23,6 +27,13 @@ for i in range(101):
         for d in range(2):
             newPos[d] = (pos[d] + (i * vel[d])) % dim[d]
         grid[newPos[1]][newPos[0]] += 1
-    draw(grid)
+    #draw(grid)
+    with open("Notes/Day14Output.txt","a") as f:
+        f.write(f"after {i+1} seconds:")
+        for row in grid:
+            f.write("".join(["#" if _ > 0 else " " for _ in row]) + "\n")
+
+    
     #input()
+    i+=1
 print(data)
