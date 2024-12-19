@@ -1,4 +1,5 @@
 from time import sleep
+from turtle import clear
 
 from common.tools import draw, add, inRange
 
@@ -62,8 +63,50 @@ for step in instructions:
                     nextPos = [nextPos[0] - d[0], nextPos[1] - d[1]]
                 pos = add(pos,d)
     else:
-        print(step)
-    
+        d = directions[step]
+        nextPos = add(pos,d)
+        if realGrid[nextPos[0]][nextPos[1]] == ".":
+            print("easy")
+            realGrid[nextPos[0]][nextPos[1]] = "@"
+            realGrid[pos[0]][pos[1]] = "."
+            pos = [nextPos[0], nextPos[1]]
+        else:
+            print(step)
+            toMove = [(pos[0],pos[1])]
+            d = directions[step]
+            toCheck = [tuple(add(pos,d))]
+            checked = []
+            clearToMove = True
+            while clearToMove and len(toCheck) != 0:
+                current = toCheck[0]
+                checked.append(current)
+                toCheck.pop(0)
+                currentVal = realGrid[current[0]][current[1]]
+                if currentVal == "#":
+                    clearToMove = False
+                elif currentVal in ["[","]"]:
+                    if currentVal == "]" and (current[0],current[1] - 1) not in checked and (current[0],current[1] - 1) not in toCheck:                       
+                        toCheck.append((current[0],current[1] - 1))
+                    elif currentVal == "[" and (current[0],current[1] + 1) not in checked and (current[0],current[1] + 1) not in toCheck:
+                        toCheck.append((current[0],current[1] + 1))
+                    toMove.append((current[0],current[1]))
+                    if (current[0] + d[0],current[1]) not in checked and (current[0] + d[0],current[1]) not in toCheck:
+                        toCheck.append((current[0] + d[0],current[1]))
+            if clearToMove:
+                print("can be moved!")
+                realGridBuffer = [[_ for _ in row] for row in realGrid]
+                toMove = toMove[::-1]
+                for i in range(len(toMove)):
+                    print(f"moving {toMove[i]} in direction {d}")
+                    thisPos = toMove[i]
+                    nextPos = add(toMove[i],d)
+                    temp = realGrid[thisPos[0]][thisPos[1]]
+                    
+                    realGridBuffer[thisPos[0]][thisPos[1]] = realGrid[nextPos[0]][nextPos[1]]
+                    realGridBuffer[nextPos[0]][nextPos[1]] = temp
+                #input()
+                realGrid = [[_ for _ in row] for row in realGridBuffer]
+
 
     draw(realGrid)
     input()
