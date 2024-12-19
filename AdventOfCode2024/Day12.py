@@ -24,7 +24,7 @@ def find_corners(grid,visited):
                c += 2
     return c
 
-def fence(grid, visited, day2):
+def fence(grid, visited):
     perimeter = 0
     for v in visited:
         for d in [(1,0),(0,1),(0,-1),(-1,0)]:
@@ -32,10 +32,8 @@ def fence(grid, visited, day2):
             if grid[f[0]][f[1]] != "#":
                 grid[f[0]][f[1]] = "@"
                 perimeter += 1
-    if day2:
-        return sum([row.count("@") for row in grid])
-    else:
-        return perimeter
+
+    return perimeter
 
 def floodFill(grid, i, j, day2):
     toVisit = [(i,j)]
@@ -53,7 +51,7 @@ def floodFill(grid, i, j, day2):
                 
     area = sum([row.count("#") for row in grid])
     gridBuffer = [[_ for _ in row] for row in grid]
-    perimeter = fence(gridBuffer, visited, day2)
+    perimeter = fence(gridBuffer, visited)
     corners = find_corners(gridBuffer, visited)
     price1 = area * perimeter
     price2 = area * corners
@@ -78,6 +76,7 @@ ans2 = 0
 for i in range(len(data)):
     for j in range(len(data[i])):
         current = (i,j)
+        print(current)
         if data[i][j] != "0" and current not in filled:
             buffer = [[_ for _ in row] for row in data]
             price1, price2 = floodFill(buffer,i,j,True)
